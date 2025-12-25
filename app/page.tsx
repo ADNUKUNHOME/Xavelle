@@ -1,65 +1,98 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+
+export default function HeroSection() {
+  const fadeInUp = {
+    initial: { opacity: 0, y: 30 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, ease: [0.6, 0.05, -0.01, 0.9] }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#FAF9F6]">
+      {/* Background Accent Element */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-[#1A1A1A] hidden lg:block" />
+
+      <div className="container mx-auto px-6 lg:px-12 z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+
+          {/* Text Content */}
+          <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              className="space-y-8"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <motion.span
+                variants={fadeInUp}
+                className="inline-block text-xs tracking-[0.3em] uppercase text-[#C5A059] font-medium"
+              >
+                The New Standard of Grace
+              </motion.span>
+
+              <motion.h1
+                variants={fadeInUp}
+                className="text-5xl md:text-7xl font-serif text-[#1A1A1A] leading-[1.1]"
+              >
+                Where Elegance <br />
+                <span className="italic text-[#333]">Meets Everyday</span>
+              </motion.h1>
+
+              <motion.p
+                variants={fadeInUp}
+                className="max-w-md text-lg text-gray-600 font-light leading-relaxed"
+              >
+                Curating timeless silhouettes for the modern young woman.
+                Experience a collection where premium fabrics meet avant-garde Indian craftsmanship.
+              </motion.p>
+
+              <motion.div
+                variants={fadeInUp}
+                className="flex flex-wrap gap-4 pt-4"
+              >
+                <button className="group relative inline-flex items-center justify-center px-8 py-4 text-sm font-medium uppercase tracking-wider text-white bg-[#111111] rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)]">
+                  <span className="relative z-10">Shop Collection</span>
+                  <span className="absolute inset-0 bg-linear-to-r from-[#B89B5E] to-[#E6CBA8] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </button>
+
+                <button className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium uppercase tracking-wider text-[#111111] border border-[#111111] rounded-sm transition-all duration-300 hover:bg-[#111111] hover:text-white hover:shadow-lg">
+                  Explore Styles
+                </button>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Visual Content */}
+          <div className="w-full lg:w-1/2 relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="relative aspect-[4/5] w-full max-w-[500px] mx-auto overflow-hidden rounded-tl-[100px] rounded-br-[100px] shadow-2xl"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              {/* Replace with actual image source */}
+              <div className="absolute inset-0 bg-neutral-200">
+                <img
+                  src="/logo.png"
+                  alt="Premium Girls Fashion"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Floating Badge */}
+              <div className="absolute bottom-10 -left-6 bg-white p-6 shadow-lg hidden md:block border-l-4 border-[#C5A059]">
+                <p className="text-[10px] uppercase tracking-widest text-gray-400">Limited Edition</p>
+                <p className="text-xl font-serif text-[#1A1A1A]">Winter '25 Luxe</p>
+              </div>
+            </motion.div>
+
+            {/* Subtle UI Detail */}
+            <div className="absolute -z-10 top-1/2 -right-12 w-64 h-64 bg-[#F3E5D8] rounded-full blur-3xl opacity-50" />
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </section>
   );
 }
