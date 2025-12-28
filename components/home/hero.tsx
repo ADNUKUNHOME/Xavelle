@@ -14,11 +14,16 @@ export default function Hero() {
 
             {/* ===== MOBILE HERO BACKGROUND ===== */}
             <div className="absolute inset-0 lg:hidden">
-                <img
-                    src="/logo.png"
-                    alt="Xavelle Premium Fashion"
+                <video
+                    src="/hero-intro.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
                     className="w-full h-full object-cover"
                 />
+
                 <div className="absolute inset-0 bg-black/45" />
             </div>
 
@@ -84,11 +89,16 @@ export default function Hero() {
                             transition={{ duration: 1.2, ease: "easeOut" }}
                             className="relative aspect-4/5 w-full max-w-125 mx-auto overflow-hidden rounded-tl-[100px] rounded-br-[100px] shadow-2xl"
                         >
-                            <img
-                                src="/logo.png"
-                                alt="Premium Girls Fashion"
+                            <video
+                                src="/hero-intro.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="auto"
                                 className="w-full h-full object-cover"
                             />
+
 
                             {/* Floating Badge */}
                             <div className="absolute bottom-10 -left-6 bg-white p-6 shadow-lg border-l-4 border-[#C5A059]">

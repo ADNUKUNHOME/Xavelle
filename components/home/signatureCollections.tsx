@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function SignatureCollections() {
     const container: Variants = {
@@ -21,12 +22,40 @@ export default function SignatureCollections() {
         },
     };
 
+    const bgImages = [
+        '/brandEssence-bg1.png',
+        '/brandEssence-bg3.png',
+        '/brandEssence-bg4.png',
+        '/brandEssence-bg5.png',
+    ];
+
+    const [currentBg, setCurrentBg] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentBg((prev) => (prev + 1) % bgImages.length);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section className="relative py-24 lg:py-32 bg-[#FAF9F6] overflow-hidden">
-
-            {/* Soft Background Accent */}
-            <div className="absolute -top-32 right-0 w-125 h-125 bg-[#EFE2D1] rounded-full blur-3xl opacity-50" />
-
+            <div className="absolute inset-0">
+                <AnimatePresence>
+                    <motion.img
+                        key={currentBg}
+                        src={bgImages[currentBg]}
+                        alt="Signature background"
+                        className="absolute inset-0 w-full h-full object-cover object-center lg:object-top"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.8, ease: 'easeInOut' }}
+                    />
+                </AnimatePresence>
+                <div className="absolute inset-0 bg-black/45" />
+            </div>
             <div className="relative container mx-auto px-6 lg:px-12">
 
                 {/* Section Header */}
@@ -37,13 +66,13 @@ export default function SignatureCollections() {
                     transition={{ duration: 0.8 }}
                     className="text-center max-w-2xl mx-auto mb-16"
                 >
-                    <span className="inline-block text-xs tracking-[0.35em] uppercase text-[#B89B5E] font-medium mb-4">
+                    <span className="inline-block text-xs tracking-[0.35em] uppercase text-[#dbc89e] font-medium mb-4">
                         Our Signature Edit
                     </span>
 
-                    <h2 className="text-4xl md:text-5xl font-serif text-[#1A1A1A] leading-tight">
+                    <h2 className="text-4xl md:text-5xl font-serif text-[#f0ecec] leading-tight">
                         Curated Collections <br />
-                        <span className="italic text-[#3A3A3A]">Designed to Inspire</span>
+                        <span className="italic text-[#999999]">Designed to Inspire</span>
                     </h2>
                 </motion.div>
 
