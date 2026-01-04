@@ -19,11 +19,16 @@ export interface IProduct extends Document {
 const ProductSchema = new Schema<IProduct>(
   {
     title: { type: String, required: true, trim: true },
-    slug: { type: String, required: true, unique: true, lowercase: true, index: true }, 
+    slug: { type: String, required: true, unique: true, lowercase: true, index: true },
     description: { type: String, required: true },
     price: { type: Number, required: true, min: 0, default: 0 },
     category: { type: String, required: true, index: true },
-    images: { type: [String], required: true },
+    images: {
+      type: [String], required: true, validate: {
+        validator: (v: string[]) => v.length > 0,
+        message: "At least one product image is required",
+      }
+    },
     sizes: {
       type: [String],
       required: true,

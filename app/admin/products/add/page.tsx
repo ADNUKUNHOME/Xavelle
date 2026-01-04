@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, Size } from '@/lib/types';
 import { apiRequest } from '@/lib/api-client';
@@ -9,21 +9,19 @@ export default function AddProductPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Partial<Product>>({
-        title: '', slug: '', description: '', price: 0,
+        title: '', description: '', price: 0,
         category: '', sizes: [], stock: 0, isFeatured: false, images: []
     });
-
-    // Auto-generate slug from title
-    useEffect(() => {
-        setFormData(prev => ({
-            ...prev,
-            slug: (prev.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-        }));
-    }, [formData.title]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        if (!formData.title || !formData.description || !formData.category || !formData.images || formData.images.length === 0) {
+            alert("Please fill all required fields including at least one image.");
+            setLoading(false);
+            return;
+        }
+        console.log("submitting product data: ", formData);
         try {
             await apiRequest('/api/products', {
                 method: 'POST',
@@ -51,6 +49,46 @@ export default function AddProductPage() {
         <div className="max-w-4xl bg-white p-10 border border-neutral-200 shadow-sm mx-auto">
             <h2 className="text-xl font-light mb-10 uppercase tracking-widest">New Collection Entry</h2>
 
+            <div className="space-y-2">
+                <label className='text-xs uppercase font-bold text-neutral-500 mr-3'>
+                    Product Images
+                </label>
+                <input
+                    type='file'
+                    accept='image/*'
+                    required
+                    onChange={async (e) => {
+                        if (!e.target.files?.[0]) return;
+
+                        const form = new FormData();
+                        form.append("file", e.target.files[0]);
+
+                        const res = await fetch('/api/uploadproductimage', {
+                            method: "POST",
+                            body: form,
+                        });
+
+                        const data = await res.json();
+
+                        setFormData(prev => ({
+                            ...prev,
+                            images: [...(prev.images || []), data.url],
+                        }))
+                    }}
+                />
+
+                <div className="flex gap-2 my-3">
+                    {formData.images?.map((img, i) => (
+                        <img
+                            key={i}
+                            src={img}
+                            className="w-20 h-20 object-cover border"
+                            alt="priview"
+                        />
+                    ))}
+                </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-2 gap-8">
                     <div className="flex flex-col gap-2">
@@ -60,14 +98,6 @@ export default function AddProductPage() {
                             className="border-b border-neutral-300 py-2 focus:border-black outline-none transition-colors"
                             value={formData.title}
                             onChange={e => setFormData({ ...formData, title: e.target.value })}
-                        />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="text-xs uppercase font-bold text-neutral-500">Slug (Auto)</label>
-                        <input
-                            readOnly
-                            className="border-b border-neutral-100 py-2 text-neutral-400 outline-none"
-                            value={formData.slug}
                         />
                     </div>
                 </div>
