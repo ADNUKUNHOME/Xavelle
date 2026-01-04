@@ -1,7 +1,7 @@
 export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
 
 export interface Product {
-    _id?: string;
+    _id: string;
     title: string;
     slug: string;
     description: string;

@@ -22,8 +22,16 @@ export async function getProducts({
 
     const total = await Product.countDocuments();
 
+    const serializedProducts = products.map(product => ({
+        ...product,
+        _id: product._id.toString(),
+        createdAt: product.createdAt?.toISOString(),
+        updatedAt: product.updatedAt?.toISOString(),
+    }));
+
+
     return {
-        products,
+        products: serializedProducts,
         pagination: {
             total,
             page,
