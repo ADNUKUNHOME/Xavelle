@@ -13,9 +13,11 @@ export async function GET(req: Request) {
     const skip = (page - 1) * limit;
 
     const products = await Product.find()
+      .select("title slug price images category isFeatured createdAt")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+
 
     const total = await Product.countDocuments();
 
