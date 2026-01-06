@@ -1,3 +1,4 @@
+import AddToCartButton from "@/components/user/product/addToCartBotton";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -50,9 +51,7 @@ export default async function ProductDetailPage({
                 </p>
 
                 <div className="pt-6">
-                    <button className="px-8 py-3 rounded-full bg-black text-white text-sm font-medium tracking-wide transition hover:opacity-90">
-                        Add to Cart
-                    </button>
+                    <AddToCartButton productId={product._id} />
                 </div>
             </div>
         </section>
