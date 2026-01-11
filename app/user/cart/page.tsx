@@ -8,7 +8,7 @@ export default function CartPage() {
 
     const fetchCart = async () => {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/cart`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user/cart`,
             { credentials: "include" }
         );
         const data = await res.json();
@@ -20,7 +20,7 @@ export default function CartPage() {
     }, []);
 
     const updateQty = async (productId: string, quantity: number) => {
-        await fetch(`/api/cart`, {
+        await fetch(`/api/user/cart`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -30,7 +30,7 @@ export default function CartPage() {
     };
 
     const removeItem = async (productId: string) => {
-        await fetch(`/api/cart`, {
+        await fetch(`/api/user/cart`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

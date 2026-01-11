@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Hero() {
     const fadeInUp = {
@@ -9,8 +9,6 @@ export default function Hero() {
         animate: { opacity: 1, y: 0 },
         transition: { duration: 0.8, ease: [0.6, 0.05, -0.01, 0.9] }
     };
-
-    const router = useRouter();
 
     return (
         <section className="relative min-h-[90vh] overflow-hidden bg-[#FAF9F6]">
@@ -72,14 +70,14 @@ export default function Hero() {
                                 variants={fadeInUp}
                                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4"
                             >
-                                <button
-                                    onClick={() => router.push('/user/products')}
-                                    className="group relative inline-flex items-center justify-center px-8 py-4 text-sm font-medium uppercase tracking-wider text-white bg-[#111111] rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)]"
-                                >
-                                    <span className="relative z-10">Shop Collection</span>
-                                    <span className="absolute inset-0 bg-linear-to-r from-[#B89B5E] to-[#E6CBA8] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                </button>
-
+                                <Link href="/user/products">
+                                    <button
+                                        className="group relative inline-flex items-center justify-center px-8 py-4 text-sm font-medium uppercase tracking-wider text-white bg-[#111111] rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)]"
+                                    >
+                                        <span className="relative z-10">Shop Collection</span>
+                                        <span className="absolute inset-0 bg-linear-to-r from-[#B89B5E] to-[#E6CBA8] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    </button>
+                                </Link>
                                 <button className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium uppercase tracking-wider text-white lg:text-[#111111] border border-white lg:border-[#111111] rounded-sm transition-all duration-300 hover:bg-white hover:text-black lg:hover:bg-[#111111] lg:hover:text-white">
                                     Explore Styles
                                 </button>

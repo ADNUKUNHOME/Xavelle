@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { verifyToken } from "@/lib/auth";
 
-export async function getUserIdFromRequest() {
+export async function getUserFromRequest() {
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
 
@@ -9,9 +9,10 @@ export async function getUserIdFromRequest() {
         throw new Error("Unauthorized");
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-        id: string;
+    const decoded = verifyToken(token) as {
+        userId: string;
+        role: string;
     };
 
-    return decoded.id;
+    return decoded;
 }

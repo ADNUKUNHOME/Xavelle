@@ -11,7 +11,7 @@ export default function AddToCartButton({ productId }: { productId: string }) {
         setLoading(true);
 
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/cart`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user/cart`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -22,8 +22,13 @@ export default function AddToCartButton({ productId }: { productId: string }) {
 
         setLoading(false);
 
+        if (res.status === 401) {
+            router.push("/login");
+            return;
+        }
+
         if (res.ok) {
-            router.push("/cart");
+            router.push("/user/cart");
         }
     };
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -21,11 +22,17 @@ export default function LoginPage() {
             body: JSON.stringify({ email, password }),
         });
 
+        const data = await res.json();
+
         if (res.ok) {
-            router.push("/admin");
+            if (data.role === "admin") {
+                router.push("/admin");
+            } else {
+                router.push("/");
+            }
         } else {
-            const data = await res.json();
             setError(data.message || "Login failed");
+            setLoading(false);
         }
 
         setLoading(false);
@@ -37,7 +44,7 @@ export default function LoginPage() {
                 onSubmit={handleSubmit}
                 className="w-full max-w-md p-6 border rounded-lg space-y-4"
             >
-                <h1 className="text-2xl font-semibold text-center">Admin Login</h1>
+                <h1 className="text-2xl font-semibold text-center uppercase">Sign In</h1>
 
                 {error && <p className="text-red-500">{error}</p>}
 
@@ -64,6 +71,13 @@ export default function LoginPage() {
                 >
                     {loading ? "Logging in..." : "Login"}
                 </button>
+                <p className="text-center text-sm text-blue-500">
+                    Don't have an account?
+                    <Link
+                        href="/register"
+                        className="ml-2 text-base font-bold hover:underline"
+                    >Register</Link>
+                </p>
             </form>
         </div>
     );

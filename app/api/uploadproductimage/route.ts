@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/authGuard";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -9,6 +10,7 @@ cloudinary.config({
 
 
 export async function POST(req: Request) {
+    await requireAdmin();
     try {
         const formData = await req.formData();
         const file = formData.get("file") as File;

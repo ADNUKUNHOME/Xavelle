@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/authGuard";
 import { connectDB } from "@/lib/db";
 import Product from "@/lib/models/Product";
 import { NextResponse } from "next/server";
@@ -37,6 +38,7 @@ export async function PUT(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
+        await requireAdmin();
         await connectDB();
         const { id } = await context.params;
         const data = await req.json();
@@ -76,6 +78,7 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
+        await requireAdmin();
         await connectDB();
         const { id } = await context.params;
 

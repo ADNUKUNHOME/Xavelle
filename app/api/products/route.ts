@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Product from "@/lib/models/Product";
 import slugify from "slugify";
+import { requireAdmin } from "@/lib/authGuard";
 
 export async function GET(req: Request) {
   try {
@@ -36,6 +37,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    await requireAdmin();
     await connectDB();
     const body = await req.json();
 

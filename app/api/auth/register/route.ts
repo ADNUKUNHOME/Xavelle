@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     try {
         await connectDB();
 
-        const { name, email, password, role } = await req.json();
+        const { name, email, password } = await req.json();
 
         if (!name || !email || !password) {
             return NextResponse.json(
@@ -30,14 +30,14 @@ export async function POST(req: NextRequest) {
             name,
             email,
             password: hashedPassword,
-            role: role || "admin",
+            role: "user",
         });
 
         return NextResponse.json(
-            { message: "Admin registered successfully" },
+            { message: "Registration successful" },
             { status: 201 }
         );
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { message: "Registration failed" },
             { status: 500 }
