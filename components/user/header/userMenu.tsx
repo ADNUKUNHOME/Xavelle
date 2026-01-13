@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function UserMenu({
     isAuthenticated,
@@ -13,6 +14,16 @@ export default function UserMenu({
     userName?: string;
 }) {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        await fetch('/api/auth/logout', {
+            method: 'POST',
+        });
+
+        router.push('/login');
+        router.refresh();
+    };
 
     if (!isAuthenticated) {
         return (
@@ -49,7 +60,10 @@ export default function UserMenu({
                         <Link className="block px-4 py-2 text-sm hover:bg-gray-100" href="/orders">
                             Orders
                         </Link>
-                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                        <button
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        >
                             Logout
                         </button>
                     </motion.div>

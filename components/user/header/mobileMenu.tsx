@@ -25,10 +25,10 @@ export default function MobileMenu({
                     </button>
 
                     <nav className="flex flex-col gap-4">
-                        <Link href="/products">Shop</Link>
-                        <Link href="/new">New Arrivals</Link>
-                        <Link href="/collections">Collections</Link>
-                        <Link href="/cart">Cart</Link>
+                        <Link href="/user/products">Shop</Link>
+                        <Link href="/user/products">New Arrivals</Link>
+                        <Link href="/user/products">Collections</Link>
+                        <Link href="/user/products">Cart</Link>
                     </nav>
                 </motion.div>
             )}

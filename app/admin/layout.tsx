@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import AdminLogoutButton from "@/components/admin/adminLogoutButton";
 
 export default async function AdminLayout({
     children,
@@ -63,14 +64,7 @@ export default async function AdminLayout({
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="text-sm">Admin User</span>
-                        <form action="/api/auth/logout" method="POST">
-                            <button
-                                type="submit"
-                                className="text-xs uppercase tracking-wider font-bold text-red-500 border border-red-100 px-3 py-1 hover:bg-red-50 transition-colors"
-                            >
-                                Logout
-                            </button>
-                        </form>
+                        <AdminLogoutButton />
                     </div>
                 </header>
 
