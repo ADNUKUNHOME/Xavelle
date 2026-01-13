@@ -3,15 +3,21 @@ export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
 export interface Product {
     _id: string;
     title: string;
-    slug: string;
     description: string;
     price: number;
     category: string;
-    sizes: Size[];
-    stock: number;
-    isFeatured: boolean;
+    subcategory?: string;
     images: string[];
-    createdAt?: string;
+    slug: string;
+    stock: number;
+    rating: number;
+    isFeatured?: boolean;
+    material?: string;
+    dimensions?: string;
+    weight?: string;
+    tags: string[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ProductsResponse {
@@ -20,5 +26,19 @@ export interface ProductsResponse {
         total: number;
         page: number;
         pages: number;
+    };
+}
+
+export interface Category {
+    id: string;
+    name: string;
+    count: number;
+}
+
+export interface FilterOptions {
+    categories: string[];
+    priceRange: {
+        min: number;
+        max: number;
     };
 }
