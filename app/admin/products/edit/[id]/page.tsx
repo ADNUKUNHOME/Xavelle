@@ -1,30 +1,44 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Product, Size } from "@/lib/types";
 import { apiRequest } from "@/lib/api-client";
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage() {
     const router = useRouter();
+    const params = useParams();
+    const id = params?.id as string;
+
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Partial<Product>>({});
 
     const CATEGORIES = ["Gown", "Sarara", "Churudar", "Top", "Saree", "Skirt"];
 
     useEffect(() => {
-        if (!params.id) return;
-        fetch(`/api/products/${params.id}`)
-            .then(res => res.json())
-            .then(data => setFormData(data));
-    }, [params.id]);
+        const loadProduct = async () => {
+            if (!id) return;
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                setFormData(data);
+            } catch {
+                alert("Failed to load product");
+                router.push("/admin/products");
+            }
+        };
+
+        loadProduct();
+    }, [id, router]);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            await apiRequest(`/api/products/${params.id}`, {
+            await apiRequest(`/api/products/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(formData),
             });

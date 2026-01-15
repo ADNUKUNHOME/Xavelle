@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function BrandEssence() {
@@ -91,13 +92,15 @@ export default function BrandEssence() {
 
                         {/* CTA */}
                         <div className="flex justify-center lg:justify-start">
-                            <motion.button
-                                whileHover={{ x: 2 }}
-                                className="group inline-flex items-center gap-2 px-8 py-4 text-sm uppercase tracking-wider font-medium border border-white/30 text-white rounded-sm transition-all duration-300 hover:bg-white hover:text-black"
-                            >
-                                Discover Our Story
-                                <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                            </motion.button>
+                            <Link href="/brand">
+                                <motion.button
+                                    whileHover={{ x: 2 }}
+                                    className="group inline-flex items-center gap-2 px-8 py-4 text-sm uppercase tracking-wider font-medium border border-white/30 text-white rounded-sm transition-all duration-300 hover:bg-white hover:text-black"
+                                >
+                                    Discover Our Story
+                                    <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </motion.button>
+                            </Link>
                         </div>
                     </motion.div>
 

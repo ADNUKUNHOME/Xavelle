@@ -19,7 +19,7 @@ export default function Breadcrumbs({ category }: BreadcrumbsProps) {
                     </svg>
                 </li>
                 <li>
-                    <Link href="/products" className="hover:text-neutral-900 transition-colors">
+                    <Link href="/user/products" className="hover:text-neutral-900 transition-colors">
                         Collection
                     </Link>
                 </li>
