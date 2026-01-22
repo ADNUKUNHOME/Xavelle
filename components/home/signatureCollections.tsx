@@ -1,136 +1,162 @@
 'use client';
 
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion, Variants } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import CollectionCard from './CollectionCard';
+
+type Product = {
+    _id: string;
+    title: string;
+    price: number;
+    images: string[];
+    category: string;
+};
+
+export type Collection = {
+    name: string;
+    subtitle: string;
+    cover: string;
+    count: number;
+    startingPrice: number;
+    previews?: string[];
+};
+
+const container: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.18 } },
+};
+
+const editorialCollections: Collection[] = [
+    {
+        name: 'Everyday Chic',
+        subtitle: 'Effortless everyday elegance',
+        cover: '/logo.png',
+        count: 0,
+        startingPrice: 0,
+    },
+    {
+        name: 'Occasion Luxe',
+        subtitle: 'Designed for unforgettable moments',
+        cover: '/logo.png',
+        count: 0,
+        startingPrice: 0,
+    },
+    {
+        name: 'Modern Ethnic',
+        subtitle: 'Tradition refined for today',
+        cover: '/logo.png',
+        count: 0,
+        startingPrice: 0,
+    },
+];
 
 export default function SignatureCollections() {
-    const container: Variants = {
-        hidden: {},
-        show: {
-            transition: {
-                staggerChildren: 0.2,
-            },
-        },
-    };
+    const router = useRouter();
 
-    const item: Variants = {
-        hidden: { opacity: 0, y: 40 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.9, ease: 'easeOut' },
-        },
-    };
-
-    const bgImages = [
-        '/brandEssence-bg1.png',
-        '/brandEssence-bg3.png',
-        '/brandEssence-bg4.png',
-        '/brandEssence-bg5.png',
-    ];
-
-    const [currentBg, setCurrentBg] = useState(0);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentBg((prev) => (prev + 1) % bgImages.length);
-        }, 4000);
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch('/api/products');
+                const data = await res.json();
 
-        return () => clearInterval(interval);
+                const resolved = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data?.products)
+                        ? data.products
+                        : [];
+
+                setProducts(resolved);
+            } catch {
+                setHasError(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
     }, []);
 
-    return (
-        <section className="relative py-24 lg:py-32 bg-[#FAF9F6] overflow-hidden">
-            <div className="absolute inset-0">
-                <AnimatePresence>
-                    <motion.img
-                        key={currentBg}
-                        src={bgImages[currentBg]}
-                        alt="Signature background"
-                        className="absolute inset-0 w-full h-full object-cover object-center lg:object-top"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1.8, ease: 'easeInOut' }}
-                    />
-                </AnimatePresence>
-                <div className="absolute inset-0 bg-black/45" />
-            </div>
-            <div className="relative container mx-auto px-6 lg:px-12">
+    const collections: Collection[] = useMemo(() => {
+        if (!products.length) return [];
 
-                {/* Section Header */}
+        const grouped = products.reduce<Record<string, Product[]>>((acc, p) => {
+            if (!p.category) return acc;
+            acc[p.category] = acc[p.category] || [];
+            acc[p.category].push(p);
+            return acc;
+        }, {});
+
+        return Object.entries(grouped).map(([name, items]) => ({
+            name,
+            subtitle:
+                name === 'Everyday Chic'
+                    ? 'Effortless everyday elegance'
+                    : name === 'Occasion Luxe'
+                        ? 'Designed for unforgettable moments'
+                        : 'Curated fashion for modern wardrobes',
+            cover: items[0]?.images?.[0] ?? '/placeholder.jpg',
+            previews: items.slice(0, 3).map(p => p.images[0]),
+            count: items.length,
+            startingPrice: Math.min(...items.map(i => i.price)),
+        }));
+    }, [products]);
+
+    const displayCollections =
+        collections.length > 0 ? collections : editorialCollections;
+
+    return (
+        <section className="relative py-28 bg-[#FAF9F6] overflow-hidden">
+            <div className="container mx-auto px-6 lg:px-12">
+
+                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-center max-w-2xl mx-auto mb-16"
+                    className="text-center max-w-2xl mx-auto mb-20"
                 >
-                    <span className="inline-block text-xs tracking-[0.35em] uppercase text-[#dbc89e] font-medium mb-4">
-                        Our Signature Edit
+                    <span className="text-xs tracking-[0.4em] uppercase text-[#c7b07b]">
+                        Signature Collections
                     </span>
-
-                    <h2 className="text-4xl md:text-5xl font-serif text-[#f0ecec] leading-tight">
-                        Curated Collections <br />
-                        <span className="italic text-[#999999]">Designed to Inspire</span>
+                    <h2 className="mt-6 text-4xl md:text-5xl font-serif text-[#2e2e2e]">
+                        Curated Edits <br />
+                        <span className="italic text-[#9c9c9c]">Crafted with Intent</span>
                     </h2>
                 </motion.div>
 
-                {/* Collections Grid */}
+                {/* Grid */}
                 <motion.div
                     variants={container}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
                 >
-                    {[
-                        {
-                            title: 'Everyday Chic',
-                            subtitle: 'Effortless daily elegance',
-                            image: '/logo.png',
-                        },
-                        {
-                            title: 'Occasion Luxe',
-                            subtitle: 'Statement styles for celebrations',
-                            image: '/logo.png',
-                        },
-                        {
-                            title: 'Modern Ethnic',
-                            subtitle: 'Tradition with a contemporary soul',
-                            image: '/logo.png',
-                        },
-                    ].map((collection, index) => (
-                        <motion.div
-                            key={index}
-                            variants={item}
-                            className="group relative h-105 rounded-2xl overflow-hidden shadow-lg cursor-pointer"
-                        >
-                            {/* Image */}
-                            <img
-                                src={collection.image}
-                                alt={collection.title}
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    {loading
+                        ? Array.from({ length: 3 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="h-105 rounded-2xl bg-neutral-200 animate-pulse"
                             />
-
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
-
-                            {/* Content */}
-                            <div className="absolute bottom-0 p-8 text-white">
-                                <h3 className="text-2xl font-serif mb-2">
-                                    {collection.title}
-                                </h3>
-                                <p className="text-sm font-light opacity-90 mb-6">
-                                    {collection.subtitle}
-                                </p>
-
-                                <span className="inline-block text-xs uppercase tracking-widest border-b border-white pb-1">
-                                    Explore Collection
-                                </span>
-                            </div>
-                        </motion.div>
-                    ))}
+                        ))
+                        : displayCollections.map((col, index) => (
+                            <CollectionCard
+                                key={index}
+                                col={col}
+                                onClick={() =>
+                                    col.count > 0 &&
+                                    router.push(
+                                        `/user/products?category=${encodeURIComponent(col.name)}`
+                                    )
+                                }
+                            />
+                        ))}
                 </motion.div>
             </div>
         </section>
