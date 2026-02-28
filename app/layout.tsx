@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -89,7 +90,7 @@ export default function RootLayout({
           {/* Header will go here */}
 
           <main className="flex-1">{children}</main>
-
+          <Toaster richColors position="top-right" />
           {/* Footer will go here */}
         </div>
       </body>
